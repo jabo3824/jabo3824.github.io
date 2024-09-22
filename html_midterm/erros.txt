@@ -1,0 +1,26 @@
+1. missing doctpye html
+2. missing  <meta charset="UTF-8">. added it in 
+3. missing <meta name="viewport" content="width=device-width, initial-scale=1.0">. added it in
+4.<html language="en"> is in the head. it should be above. moved it to the right place and changed the tag to lang
+5. missing clsing head tag. added it in
+6. missing closing h1 tag. added it in
+7. missing opening paragraph tag. added it in
+8. list item 6 starts with a closing tag. made it an opening
+9. ordered list has a unordered list closing tag. changed it to an ordered list closing tag
+10. missing closing paragraph tag. added it in
+11. path for image source is wrong. fixed it.
+12. missing alt tag for image
+13. link is closed with an image tag instead of an "a"
+14. the td tag is unclosed. closed it properly
+15. missing closing table tag. added it in
+16. image source is not properly taged. replaced it with the src tag
+17. path for image is wrong
+18. missing the p tags for paragraph. added both opening and closing tags
+19. missing s tags for the paragraph. added both opening and closing tags
+20. p tag does not have a "bgcolor" modifier. added in the correct styling for the line with background-color
+21. comment not properly closed. added in the closing tag
+22. link missing closing a tag
+23. closing em and p tag are in the wrong place. aslo its suppoed to be underlined not emphasisized. switched them around so the u tag is before the p tag
+24. dl list contains li instead of dt tags. switched them to dt tags
+25. switched the second set of li tags to dd tags.
+26. h2 tag is closed with an h3 tag. changed it so it is closed with an h2 tag
