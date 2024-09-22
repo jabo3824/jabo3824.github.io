@@ -1,0 +1,16 @@
+1. missing <html lang="en">. Added it in
+2. Missing  <meta charset="UTF-8">. Added it in
+3. missing   <meta name="viewport" content="width=device-width, initial-scale=1.0">. added it in
+4. <h1> tag in the head of the code. moved it to the body
+5. missing closing head tag. Added it in
+6. opening body tag missing ">". added it in
+7.html tag inside of the body. removed it
+8. missing the closing pagaragph tag. added it in
+9. missing the closing strong tag as well. added it in
+10.image has an href tag instead of a source and the path was wrong and there is no alt tag. added in the right tags and path
+11. missing opening h2 tag. added it in
+12. missing opening pagaragph tag. added it in
+13. missing closing div tag. added it in
+14. Comment is not a comment. missing "!--" and "--". added it in
+15. missing closing body tag. added it in
+16. Missing the "l" in closing html tag
