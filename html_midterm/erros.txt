@@ -1,4 +1,4 @@
-1. missing doctpye html
+1. missing doctype html. added it in
 2. missing  <meta charset="UTF-8">. added it in 
 3. missing <meta name="viewport" content="width=device-width, initial-scale=1.0">. added it in
 4.<html language="en"> is in the head. it should be above. moved it to the right place and changed the tag to lang
