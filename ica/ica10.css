@@ -1,0 +1,23 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    text-align: center;
+    padding: 50px;
+}
+#color-box {
+    width: 100px;
+    height: 100px;
+    background-color: blue;
+    margin: 20px auto;
+}
+#text {
+    font-size: 20px;
+    margin-top: 20px;
+    color: black;
+}
+button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
