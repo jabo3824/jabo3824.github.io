@@ -7,7 +7,8 @@ function randomValueFromArray(array) {
   return array[random];
 }
 
-const storyText = "It was a cold, foggy night, and :insertx: decided to wander through :inserty:. Just as the clock struck midnight, a chilling wind swept through, and suddenly :insertx: :insertz:. Witnesses swore they saw it happen, but nobody could believe their eyes — after all, :insertx: has been dead for centuries.";
+const storyText = "It was a cold, foggy night, and :insertx: decided to wander through :inserty:. Just as the clock struck midnight, a chilling wind swept through, and suddenly :insertx: :insertz:. Witnesses swore they saw it happen, but nobody could believe their eyes — after all, Bob has been dead for centuries.";
+
 
 const insertX = ["Skully the Skeleton", "The Grim Reaper", "Phantom Bones"];
 const insertY = ["the abandoned graveyard", "the haunted forest", "the old mansion"];
