@@ -13,19 +13,19 @@ document.addEventListener('DOMContentLoaded', () => {
     let movingLeft = false;
     let movingRight = false;
 
-    // Start the game when the button is clicked
+    
     startButton.addEventListener('click', () => {
         score = 0;
-        ballSpeed = 2; // Reset the speed
+        ballSpeed = 2; 
         scoreDisplay.textContent = 'Score: 0';
         startButton.style.display = 'none';
         gameActive = true;
         resetBall();
         dropBall();
-        moveBasket(); // Start basket movement
+        moveBasket(); 
     });
 
-    // Track key presses for movement
+    
     document.addEventListener('keydown', (e) => {
         if (!gameActive) return;
         if (e.key === 'ArrowLeft') movingLeft = true;
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'ArrowRight') movingRight = false;
     });
 
-    // Move the basket
+    
     function moveBasket() {
         if (!gameActive) return;
 
@@ -51,10 +51,10 @@ document.addEventListener('DOMContentLoaded', () => {
             basket.style.left = (basketLeft + basketSpeed) + 'px';
         }
 
-        requestAnimationFrame(moveBasket); // Smooth movement
+        requestAnimationFrame(moveBasket); 
     }
 
-    // Drop the ball continuously
+    
     function dropBall() {
         if (!gameActive) return;
 
@@ -62,8 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const basketLeft = parseInt(window.getComputedStyle(basket).getPropertyValue('left'));
         const ballLeft = parseInt(window.getComputedStyle(ball).getPropertyValue('left'));
 
-        // Add padding to improve collision detection
-        const padding = 10; // Increase this value to make it more forgiving
+        
+        const padding = 10; 
 
         if (ballTop >= gameContainer.clientHeight - basket.clientHeight - ball.clientHeight) {
             if (
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ) {
                 score++;
                 scoreDisplay.textContent = 'Score: ' + score;
-                ballSpeed += 0.5; // Increase speed with each catch
+                ballSpeed += 0.5; 
                 resetBall();
             } else {
                 alert('Game Over! Final Score: ' + score);
@@ -84,17 +84,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Reset the ball to the top
+    
     function resetBall() {
         ball.style.top = '0px';
         ball.style.left = Math.random() * (gameContainer.clientWidth - ball.clientWidth) + 'px';
-        dropBall(); // Keep dropping the ball
+        dropBall(); 
     }
 
-    // Reset the game
+    
     function resetGame() {
         gameActive = false;
         cancelAnimationFrame(animationId);
-        startButton.style.display = 'block'; // Show start button again
+        startButton.style.display = 'block'; 
     }
 });
