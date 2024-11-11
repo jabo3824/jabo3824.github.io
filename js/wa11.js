@@ -13,7 +13,7 @@ const alts = {
   'Jay-Garrick.png' : 'Jay Garrick',
   'Wally-West.jpg' : 'Wally West',
   'the-flash.jpg' : 'The Flash',
-  'chris.jpg' : 'chris'
+  'chris.jpg' : 'Chris'
 }
 
 for (const image of images) {
