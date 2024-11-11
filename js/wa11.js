@@ -1,44 +1,50 @@
+
 const displayedImage = document.querySelector('.displayed-img');
 const thumbBar = document.querySelector('.thumb-bar');
 
 const btn = document.querySelector('button');
 const overlay = document.querySelector('.overlay');
 
-/* Declaring the array of image filenames */
 
-const images = ['bart-allen.jpg', `pic2.jpg`, `pic3.jpg`, `pic4.jpg`, `pic5.jpg`];
+
+const images = ['bart-allen.jpg', `Jay-Garrick.png`, `Wally-West.jpg`, `The-Flash.jpg`, `chris.jpg`];
 const alts = {
   'bart-allen.jpg' : 'bart allen',
-  'pic2.jpg' : 'Rock that looks like a wave',
-  'pic3.jpg' : 'Purple and white pansies',
-  'pic4.jpg' : 'Section of wall from a pharoah\'s tomb',
-  'pic5.jpg' : 'Large moth on a leaf'
+  'Jay-Garrick.png' : 'Jay Garrick',
+  'Wally-West.jpg' : 'Wally West',
+  'the-flah.jpg' : 'The Flash',
+  'chris.jpg' : 'chris'
 }
-
-/* Looping through images */
 
 for (const image of images) {
-  const newImage = document.createElement('img');
-  newImage.setAttribute('src', `images/${image}`);
-  newImage.setAttribute('alt', alts[image]);
-  thumbBar.appendChild(newImage);
-  newImage.addEventListener('click', e => {
-    displayedImage.src = e.target.src;
-    displayedImage.alt = e.target.alt;
-  });
-}
-
-/* Wiring up the Darken/Lighten button */
-
-btn.addEventListener('click', () => {
-  const btnClass = btn.getAttribute('class');
-  if (btnClass === 'dark') {
-    btn.setAttribute('class','light');
-    btn.textContent = 'Lighten';
-    overlay.style.backgroundColor = 'rgba(0,0,0,0.5)';
-  } else {
-    btn.setAttribute('class','dark');
-    btn.textContent = 'Darken';
-    overlay.style.backgroundColor = 'rgba(0,0,0,0)';
+    const newImage = document.createElement('img');
+    newImage.setAttribute('src', `/img/${image}`);
+    newImage.setAttribute('alt', alts[image]);
+    thumbBar.appendChild(newImage);
+  
+    newImage.addEventListener('click', e => {
+    
+      const tempSrc = displayedImage.src;
+      const tempAlt = displayedImage.alt;
+  
+      displayedImage.src = e.target.src;
+      displayedImage.alt = e.target.alt;
+  
+      e.target.src = tempSrc;
+      e.target.alt = tempAlt;
+    });
   }
-});
+  
+ 
+  btn.addEventListener('click', () => {
+    const btnClass = btn.getAttribute('class');
+    if (btnClass === 'dark') {
+      btn.setAttribute('class', 'light');
+      btn.textContent = 'Lighten';
+      overlay.style.backgroundColor = 'rgba(0,0,0,0.5)';
+    } else {
+      btn.setAttribute('class', 'dark');
+      btn.textContent = 'Darken';
+      overlay.style.backgroundColor = 'rgba(0,0,0,0)';
+    }
+  });
