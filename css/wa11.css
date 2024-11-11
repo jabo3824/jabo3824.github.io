@@ -9,7 +9,7 @@ h1 {
   }
   
   .full-img {
-    position: relative;
+    position: center;
     display: block;
     width: 640px;
     height: 480px;
