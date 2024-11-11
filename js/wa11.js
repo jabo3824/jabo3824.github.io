@@ -7,12 +7,12 @@ const overlay = document.querySelector('.overlay');
 
 
 
-const images = ['Bart-Allen.jpg', `Jay-Garrick.png`, `Wally-West.jpg`, `Sleeping Roommate.jpg`, `chris.jpg`];
+const images = ['Bart-Allen.jpg', `Jay-Garrick.png`, `Wally-West.jpg`, `Sleeping Roommate.jpeg`, `chris.jpg`];
 const alts = {
   'Bart-Allen.jpg' : 'Bart Allen',
   'Jay-Garrick.png' : 'Jay Garrick',
   'Wally-West.jpg' : 'Wally West',
-  'Sleeping Roommate.jpg' : 'Sleeping Roommate',
+  'Sleeping Roommate.jpeg' : 'Sleeping Roommate',
   'chris.jpg' : 'Chris'
 }
 
