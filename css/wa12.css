@@ -1,0 +1,56 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #181818;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    justify-content: center;
+    color: #c5c5c5;
+ }
+ 
+ #comic-container {
+    text-align: center;
+    padding: 20px;
+    background-color: #000000;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 600px;
+ }
+ 
+ #comic-title {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: white,
+ }
+ 
+ #comic-img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+ }
+ 
+ #comic-date {
+    font-size: 0.9em;
+    color: #c5c5c5;
+    margin-top: 5px;
+ }
+ 
+ #fetch-button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    font-size: 1em;
+    background-color: #09c9bd;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+ }
+ 
+ #fetch-button:hover {
+    background-color: #005bb5;
+ }
