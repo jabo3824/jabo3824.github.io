@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let movingLeft = false;
     let movingRight = false;
 
-    
     startButton.addEventListener('click', () => {
         score = 0;
         ballSpeed = 2; 
@@ -25,7 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
         moveBasket(); 
     });
 
-    
     document.addEventListener('keydown', (e) => {
         if (!gameActive) return;
         if (e.key === 'ArrowLeft') movingLeft = true;
@@ -37,24 +35,32 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'ArrowRight') movingRight = false;
     });
 
-    
     function moveBasket() {
         if (!gameActive) return;
 
         const basketLeft = parseInt(window.getComputedStyle(basket).getPropertyValue('left'));
         const containerWidth = gameContainer.clientWidth;
 
-        if (movingLeft && basketLeft > 0) {
-            basket.style.left = (basketLeft - basketSpeed) + 'px';
+        if (movingLeft) {
+            if (basketLeft <= 0) {
+                basket.style.left = (containerWidth - basket.clientWidth) + 'px'; // Teleport to the right edge
+            } else {
+                basket.style.left = (basketLeft - basketSpeed) + 'px';
+            }
         }
-        if (movingRight && basketLeft < containerWidth - basket.clientWidth) {
-            basket.style.left = (basketLeft + basketSpeed) + 'px';
+        if (movingRight) {
+            if (basketLeft >= containerWidth - basket.clientWidth) {
+                basket.style.left = '0px'; // Teleport to the left edge
+            } else {
+                basket.style.left = (basketLeft + basketSpeed) + 'px';
+            }
         }
 
-        requestAnimationFrame(moveBasket); 
+        if (movingLeft || movingRight) {
+            requestAnimationFrame(moveBasket); 
+        }
     }
 
-    
     function dropBall() {
         if (!gameActive) return;
 
@@ -62,7 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const basketLeft = parseInt(window.getComputedStyle(basket).getPropertyValue('left'));
         const ballLeft = parseInt(window.getComputedStyle(ball).getPropertyValue('left'));
 
-        
         const padding = 10; 
 
         if (ballTop >= gameContainer.clientHeight - basket.clientHeight - ball.clientHeight) {
@@ -84,14 +89,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    
     function resetBall() {
         ball.style.top = '0px';
         ball.style.left = Math.random() * (gameContainer.clientWidth - ball.clientWidth) + 'px';
         dropBall(); 
     }
 
-    
     function resetGame() {
         gameActive = false;
         cancelAnimationFrame(animationId);
