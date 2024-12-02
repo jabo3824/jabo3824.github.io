@@ -1,79 +1,104 @@
-// Selectors
+
 const spaceship = document.getElementById('spaceship');
 const gameContainer = document.getElementById('game-container');
 
-// Initial Variables
+
 let spaceshipX = window.innerWidth / 2;
 let spaceshipY = window.innerHeight - 70;
-let speed = 15; // Increased spaceship base speed
-let acceleration = 1; // Faster acceleration
-let maxSpeed = 30; // Higher cap for speed
+let speed = 10; 
+let acceleration = 0.7;
+let maxSpeed = 18;
 let keysPressed = { ArrowLeft: false, ArrowRight: false, ArrowUp: false, ArrowDown: false };
 
 let health = 100;
 let score = 0;
 let frameCount = 0;
 
-const largeAsteroidChance = 0.4; // 40% chance for a large asteroid
-const treasureSpawnInterval = 150; // Reduced frames between treasure spawns
+let currentLevel = 1;
+const largeAsteroidChance = 0.3; 
+let treasureSpawnInterval = 200;
+
+const asteroids = [];
+const asteroidCount = 20; 
 let treasures = [];
 
-// Obstacles (Asteroids)
-const asteroids = [];
-const asteroidCount = 20;
 
-// Create Asteroids
+const baseAsteroidSpeed = {
+  small: 5, 
+  large: 4, 
+};
+
+
+const dynamicAsteroidSpeedAdjustment = {
+  forward: 2, 
+  backward: -1, 
+};
+
+
+function increaseDifficulty() {
+  currentLevel = 2;
+  treasureSpawnInterval = 120;
+  asteroids.forEach((asteroid) => {
+    asteroid.speed += 2; 
+  });
+  alert('Welcome to Level 2! Get ready for a challenge!');
+}
+
+
 function createAsteroids() {
   for (let i = 0; i < asteroidCount; i++) {
     const asteroid = document.createElement('div');
     asteroid.classList.add('asteroid');
 
-    // Randomly decide if this is a large asteroid
+    
     const isLarge = Math.random() < largeAsteroidChance;
     asteroid.classList.toggle('large-asteroid', isLarge);
 
-    // Set random positions and speeds
+    
     asteroid.style.left = `${Math.random() * (window.innerWidth - 50)}px`;
-    asteroid.style.top = `${-Math.random() * 500}px`; // Start above the screen
+    asteroid.style.top = `${-Math.random() * 500}px`;
     gameContainer.appendChild(asteroid);
 
-    // Add asteroid to the array
     asteroids.push({
       element: asteroid,
-      speed: isLarge ? 7 + Math.random() * 3 : 10 + Math.random() * 3, // Faster speeds
+      speed: isLarge
+        ? baseAsteroidSpeed.large
+        : baseAsteroidSpeed.small,
       size: isLarge ? 'large' : 'small',
     });
   }
 }
 
-// Create Treasures
+
 function createTreasure() {
   const treasure = document.createElement('div');
   treasure.classList.add('treasure');
+
+  const minY = window.innerHeight * 0.3;
+  const maxY = window.innerHeight - 100;
+
   treasure.style.left = `${Math.random() * (window.innerWidth - 50)}px`;
-  treasure.style.top = `${Math.random() * (window.innerHeight - 100)}px`;
+  treasure.style.top = `${Math.random() * (maxY - minY) + minY}px`;
   gameContainer.appendChild(treasure);
 
   treasures.push({
     element: treasure,
-    timer: 200, // Frames before despawning
+    timer: 200,
   });
 }
 
-// Update Treasures
+
 function updateTreasures() {
   treasures.forEach((treasure, index) => {
     treasure.timer--;
 
-    // Check if player collects treasure
     if (checkCollision(treasure.element, spaceship)) {
-      score += 100; // Bonus points for collecting treasure
+      score += 100;
       updateScore();
       treasure.element.remove();
       treasures.splice(index, 1);
     }
 
-    // Remove treasure if timer expires
     if (treasure.timer <= 0) {
       treasure.element.remove();
       treasures.splice(index, 1);
@@ -81,36 +106,53 @@ function updateTreasures() {
   });
 }
 
-// Update Asteroids
+
 function updateAsteroids() {
+  const playerDirection = getPlayerDirection();
+
   asteroids.forEach((asteroid) => {
     const currentTop = parseFloat(asteroid.element.style.top);
 
-    // Move asteroid downward
+    
+    const adjustedSpeed =
+      asteroid.speed +
+      (playerDirection === 'forward'
+        ? dynamicAsteroidSpeedAdjustment.forward
+        : playerDirection === 'backward'
+        ? dynamicAsteroidSpeedAdjustment.backward
+        : 0);
+
     if (currentTop > window.innerHeight) {
-      // Reset asteroid position
       resetAsteroid(asteroid);
     } else {
-      asteroid.element.style.top = `${currentTop + asteroid.speed}px`;
+      asteroid.element.style.top = `${currentTop + adjustedSpeed}px`;
     }
 
-    // Check for collisions
     if (checkCollision(asteroid.element, spaceship)) {
-      health -= asteroid.size === 'large' ? 20 : 10; // Large asteroids deal more damage
+      health -= asteroid.size === 'large' ? 20 : 10;
       updateHealth();
-      resetAsteroid(asteroid); // Reset asteroid after collision
+      resetAsteroid(asteroid);
     }
   });
 }
 
-// Reset Asteroid Position and Properties
+
+function getPlayerDirection() {
+  if (keysPressed.ArrowUp) return 'forward';
+  if (keysPressed.ArrowDown) return 'backward';
+  return 'idle';
+}
+
+
 function resetAsteroid(asteroid) {
   asteroid.element.style.top = `${-50}px`;
   asteroid.element.style.left = `${Math.random() * (window.innerWidth - 50)}px`;
-  asteroid.speed = asteroid.size === 'large' ? 7 + Math.random() * 3 : 10 + Math.random() * 3;
+  asteroid.speed = asteroid.size === 'large'
+    ? baseAsteroidSpeed.large
+    : baseAsteroidSpeed.small;
 }
 
-// Collision Detection
+
 function checkCollision(a, b) {
   const rect1 = a.getBoundingClientRect();
   const rect2 = b.getBoundingClientRect();
@@ -122,7 +164,7 @@ function checkCollision(a, b) {
   );
 }
 
-// Update Health
+
 function updateHealth() {
   document.getElementById('health').textContent = health;
   if (health <= 0) {
@@ -131,12 +173,15 @@ function updateHealth() {
   }
 }
 
-// Update Score
+
 function updateScore() {
   document.getElementById('score').textContent = score;
+  if (score >= 1000 && currentLevel === 1) {
+    increaseDifficulty();
+  }
 }
 
-// Update Spaceship Position
+
 function updateSpaceshipPosition() {
   if (keysPressed.ArrowLeft && spaceshipX > 0) spaceshipX -= speed;
   if (keysPressed.ArrowRight && spaceshipX < window.innerWidth - 50) spaceshipX += speed;
@@ -147,7 +192,7 @@ function updateSpaceshipPosition() {
   spaceship.style.top = `${spaceshipY}px`;
 }
 
-// Game Loop
+
 function gameLoop() {
   frameCount++;
 
@@ -155,7 +200,6 @@ function gameLoop() {
   updateAsteroids();
   updateTreasures();
 
-  // Spawn treasures more frequently
   if (frameCount % treasureSpawnInterval === 0) {
     createTreasure();
   }
@@ -163,12 +207,12 @@ function gameLoop() {
   requestAnimationFrame(gameLoop);
 }
 
-// Initialize
+
 createAsteroids();
 updateSpaceshipPosition();
 gameLoop();
 
-// Event Listeners for Key Press
+
 document.addEventListener('keydown', (e) => {
   if (keysPressed[e.key] !== undefined) keysPressed[e.key] = true;
 });
