@@ -1,67 +1,66 @@
 
 body {
-    margin: 0;
-    overflow: hidden;
-    background: linear-gradient(to bottom, #000020, #020042);
-    font-family: Arial, sans-serif;
-    color: white;
-  }
-  
-  #game-container {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-  }
-  
-  #spaceship {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 50px;
-    height: 50px;
-    background: linear-gradient(to top, #0ff, #00f);
-    border-radius: 10px;
-    box-shadow: 0 0 15px #0ff;
-  }
-  
-  #scoreboard {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    font-size: 18px;
-  }
-  .asteroid {
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(to bottom, #ff4d4d, #990000);
-    border-radius: 50%;
-    box-shadow: 0 0 10px #ff4d4d;
-  }
-  .asteroid {
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(to bottom, #ff4d4d, #990000);
-    border-radius: 50%;
-    box-shadow: 0 0 10px #ff4d4d;
-  }
-  
-  .large-asteroid {
-    width: 70px;
-    height: 70px;
-    background: linear-gradient(to bottom, #ff9f1a, #cc6600);
-    box-shadow: 0 0 15px #ff9f1a;
-  }
-  .treasure {
-    position: absolute;
-    width: 0;
-    height: 0;
-    border-left: 15px solid transparent;
-    border-right: 15px solid transparent;
-    border-bottom: 30px solid #ffd700; 
-    filter: drop-shadow(0 0 10px #ffd700);
-  }
-  
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #000;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+#game-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#spaceship {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background-color: #ffffff;
+  border-radius: 50%;
+}
+
+.asteroid {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #ff5733;
+}
+
+.large-asteroid {
+  width: 60px;
+  height: 60px;
+  background-color: #c70039;
+}
+
+.treasure {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background: radial-gradient(circle, gold, orange);
+  border-radius: 50%;
+  box-shadow: 0 0 10px gold;
+}
+
+
+#banner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 20px 40px;
+  font-size: 24px;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  z-index: 1000;
+  display: none;
+  border: 2px solid #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
