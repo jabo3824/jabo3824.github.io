@@ -23,8 +23,7 @@ let spaceshipX = window.innerWidth / 2;
 let spaceshipY = window.innerHeight - 70;
 let speed = 10;
 let acceleration = 0.7;
-let maxSpeed = 18;
-let keysPressed = { ArrowLeft: false, ArrowRight: false, ArrowUp: false, ArrowDown: false };
+let keysPressed = { W: false, A: false, S: false, D: false };
 
 let health = 100;
 let score = 0;
@@ -40,8 +39,8 @@ let treasures = [];
 
 
 const baseAsteroidSpeed = {
-  small: 5,
-  large: 4,
+  small: 4,
+  large: 3,
 };
 
 
@@ -81,7 +80,7 @@ function increaseDifficulty() {
 
   
   asteroids.forEach((asteroid) => {
-    asteroid.speed += 2;
+    asteroid.speed += 1;
   });
 
   applyLevelColors(); 
@@ -171,16 +170,17 @@ function updateTreasures() {
 function updateAsteroids() {
   const playerDirection = getPlayerDirection();
 
-  asteroids.forEach((asteroid, index) => {
+  asteroids.forEach((asteroid) => {
     const currentTop = parseFloat(asteroid.element.style.top);
 
+    
     const adjustedSpeed =
       asteroid.speed +
-      (playerDirection === 'forward'
+      (playerDirection === 'forward' 
         ? dynamicAsteroidSpeedAdjustment.forward
-        : playerDirection === 'backward'
+        : playerDirection === 'backward' 
         ? dynamicAsteroidSpeedAdjustment.backward
-        : 0);
+        : 0); 
 
     if (currentTop > window.innerHeight) {
       respawnAsteroid(asteroid); 
@@ -197,11 +197,13 @@ function updateAsteroids() {
 }
 
 
+
 function getPlayerDirection() {
-  if (keysPressed.ArrowUp) return 'forward';
-  if (keysPressed.ArrowDown) return 'backward';
-  return 'idle';
+  if (keysPressed.W) return 'forward'; 
+  if (keysPressed.S) return 'backward'; 
+  return 'idle'; 
 }
+
 
 function respawnAsteroid(asteroid) {
   asteroid.element.style.top = `${-Math.random() * 500}px`; 
@@ -242,21 +244,22 @@ function updateScore() {
   document.getElementById('score').textContent = score;
 
   
-  if (score >= 100 * currentLevel) {
+  if (score >= 500 * currentLevel) {
     increaseDifficulty();
   }
 }
 
 
 function updateSpaceshipPosition() {
-  if (keysPressed.ArrowLeft && spaceshipX > 0) spaceshipX -= speed;
-  if (keysPressed.ArrowRight && spaceshipX < window.innerWidth - 50) spaceshipX += speed;
-  if (keysPressed.ArrowUp && spaceshipY > 0) spaceshipY -= speed;
-  if (keysPressed.ArrowDown && spaceshipY < window.innerHeight - 50) spaceshipY += speed;
+  if (keysPressed.A && spaceshipX > 0) spaceshipX -= speed; 
+  if (keysPressed.D && spaceshipX < window.innerWidth - 50) spaceshipX += speed; 
+  if (keysPressed.W && spaceshipY > 0) spaceshipY -= speed; 
+  if (keysPressed.S && spaceshipY < window.innerHeight - 50) spaceshipY += speed; 
 
   spaceship.style.left = `${spaceshipX}px`;
   spaceship.style.top = `${spaceshipY}px`;
 }
+
 
 
 function gameLoop() {
@@ -278,8 +281,8 @@ const startScreen = document.getElementById('start-screen');
 const startButton = document.getElementById('start-button');
 
 startButton.addEventListener('click', () => {
-  startScreen.style.display = 'none'; // Hide the start screen
-  startGame(); // Call the main game function
+  startScreen.style.display = 'none'; 
+  startGame(); 
 });
 
 function startGame() {
@@ -291,9 +294,11 @@ function startGame() {
 
 
 document.addEventListener('keydown', (e) => {
-  if (keysPressed[e.key] !== undefined) keysPressed[e.key] = true;
+  const key = e.key.toUpperCase(); 
+  if (keysPressed[key] !== undefined) keysPressed[key] = true;
 });
 
 document.addEventListener('keyup', (e) => {
-  if (keysPressed[e.key] !== undefined) keysPressed[e.key] = false;
+  const key = e.key.toUpperCase(); 
+  if (keysPressed[key] !== undefined) keysPressed[key] = false;
 });
