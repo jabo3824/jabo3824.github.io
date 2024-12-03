@@ -57,6 +57,11 @@ const levelColors = {
   3: { background: '#33001a', smallAsteroid: '#5733ff', largeAsteroid: '#0039c7' },
 };
 
+function showStartScreen() {
+  startScreen.style.display = 'flex';
+  startButton.textContent = 'Restart Game';
+}
+
 
 function showBanner(message) {
   banner.textContent = message;
@@ -269,10 +274,20 @@ function gameLoop() {
 }
 
 
-createAsteroids();
-applyLevelColors();
-updateSpaceshipPosition();
-gameLoop();
+const startScreen = document.getElementById('start-screen');
+const startButton = document.getElementById('start-button');
+
+startButton.addEventListener('click', () => {
+  startScreen.style.display = 'none'; // Hide the start screen
+  startGame(); // Call the main game function
+});
+
+function startGame() {
+  createAsteroids();
+  applyLevelColors();
+  updateSpaceshipPosition();
+  gameLoop();
+}
 
 
 document.addEventListener('keydown', (e) => {
