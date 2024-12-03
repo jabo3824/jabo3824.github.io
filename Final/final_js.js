@@ -1,4 +1,4 @@
-// Selectors
+
 const spaceship = document.getElementById('spaceship');
 const gameContainer = document.getElementById('game-container');
 const banner = document.createElement('div');
@@ -18,7 +18,7 @@ banner.style.cssText = `
 `;
 document.body.appendChild(banner);
 
-// Initial Variables
+
 let spaceshipX = window.innerWidth / 2;
 let spaceshipY = window.innerHeight - 70;
 let speed = 10;
@@ -35,29 +35,29 @@ const largeAsteroidChance = 0.3;
 let treasureSpawnInterval = 200;
 
 const asteroids = [];
-const asteroidCount = 20;
+const asteroidCount = 35;
 let treasures = [];
 
-// Base asteroid speeds
+
 const baseAsteroidSpeed = {
   small: 5,
   large: 4,
 };
 
-// Speed adjustment based on player movement
+
 const dynamicAsteroidSpeedAdjustment = {
   forward: 2,
   backward: -1,
 };
 
-// Colors for each level
+
 const levelColors = {
   1: { background: '#000020', smallAsteroid: '#ff5733', largeAsteroid: '#c70039' },
   2: { background: '#001a33', smallAsteroid: '#33ff57', largeAsteroid: '#39c700' },
   3: { background: '#33001a', smallAsteroid: '#5733ff', largeAsteroid: '#0039c7' },
 };
 
-// Function to Display Banner
+
 function showBanner(message) {
   banner.textContent = message;
   banner.style.display = 'block';
@@ -66,27 +66,31 @@ function showBanner(message) {
   }, 2000);
 }
 
-// Function to Increase Difficulty and Change Colors
+
 function increaseDifficulty() {
   currentLevel++;
-  treasureSpawnInterval -= 40;
+  treasureSpawnInterval = Math.max(treasureSpawnInterval - 20, 50); 
 
+  health = 100;
+  updateHealth();
+
+  
   asteroids.forEach((asteroid) => {
-    asteroid.speed += 4;
+    asteroid.speed += 2;
   });
 
-  applyLevelColors();
+  applyLevelColors(); 
   showBanner(`Welcome to Level ${currentLevel}!`);
 }
 
-// Apply Level-Specific Colors
+
 function applyLevelColors() {
-  const colors = levelColors[currentLevel];
+  const colors = levelColors[currentLevel % Object.keys(levelColors).length + 1] || levelColors[1];
   if (colors) {
-    // Update background color
+    
     gameContainer.style.backgroundColor = colors.background;
 
-    // Update asteroid colors
+    
     asteroids.forEach((asteroid) => {
       asteroid.element.style.backgroundColor =
         asteroid.size === 'large' ? colors.largeAsteroid : colors.smallAsteroid;
@@ -94,7 +98,7 @@ function applyLevelColors() {
   }
 }
 
-// Create Asteroids with Default Spawn Logic
+
 function createAsteroids() {
   for (let i = 0; i < asteroidCount; i++) {
     const asteroid = document.createElement('div');
@@ -119,7 +123,9 @@ function createAsteroids() {
   }
 }
 
-// Create Treasures
+
+
+
 function createTreasure() {
   const treasure = document.createElement('div');
   treasure.classList.add('treasure');
@@ -137,7 +143,7 @@ function createTreasure() {
   });
 }
 
-// Update Treasures
+
 function updateTreasures() {
   treasures.forEach((treasure, index) => {
     treasure.timer--;
@@ -156,11 +162,11 @@ function updateTreasures() {
   });
 }
 
-// Update Asteroids with Dynamic Speed Adjustment
+
 function updateAsteroids() {
   const playerDirection = getPlayerDirection();
 
-  asteroids.forEach((asteroid) => {
+  asteroids.forEach((asteroid, index) => {
     const currentTop = parseFloat(asteroid.element.style.top);
 
     const adjustedSpeed =
@@ -172,7 +178,7 @@ function updateAsteroids() {
         : 0);
 
     if (currentTop > window.innerHeight) {
-      resetAsteroid(asteroid);
+      respawnAsteroid(asteroid); 
     } else {
       asteroid.element.style.top = `${currentTop + adjustedSpeed}px`;
     }
@@ -180,31 +186,30 @@ function updateAsteroids() {
     if (checkCollision(asteroid.element, spaceship)) {
       health -= asteroid.size === 'large' ? 20 : 10;
       updateHealth();
-      resetAsteroid(asteroid);
+      respawnAsteroid(asteroid);
     }
   });
 }
 
-// Determine Player Direction
+
 function getPlayerDirection() {
   if (keysPressed.ArrowUp) return 'forward';
   if (keysPressed.ArrowDown) return 'backward';
   return 'idle';
 }
 
-// Reset Asteroid Position and Properties
-function resetAsteroid(asteroid) {
-  asteroid.element.style.top = `${-50}px`;
+function respawnAsteroid(asteroid) {
+  asteroid.element.style.top = `${-Math.random() * 500}px`; 
   asteroid.element.style.left = `${Math.random() * (window.innerWidth - 50)}px`;
   asteroid.speed = asteroid.size === 'large' ? baseAsteroidSpeed.large : baseAsteroidSpeed.small;
 
+  const colors = levelColors[currentLevel % Object.keys(levelColors).length + 1] || levelColors[1];
   asteroid.element.style.backgroundColor =
-    asteroid.size === 'large'
-      ? levelColors[currentLevel].largeAsteroid
-      : levelColors[currentLevel].smallAsteroid;
+    asteroid.size === 'large' ? colors.largeAsteroid : colors.smallAsteroid;
 }
 
-// Collision Detection
+
+
 function checkCollision(a, b) {
   const rect1 = a.getBoundingClientRect();
   const rect2 = b.getBoundingClientRect();
@@ -216,7 +221,7 @@ function checkCollision(a, b) {
   );
 }
 
-// Update Health
+
 function updateHealth() {
   document.getElementById('health').textContent = health;
   if (health <= 0) {
@@ -227,15 +232,17 @@ function updateHealth() {
   }
 }
 
-// Update Score
+
 function updateScore() {
   document.getElementById('score').textContent = score;
-  if (score >= 200 * currentLevel && currentLevel < 3) {
+
+  
+  if (score >= 100 * currentLevel) {
     increaseDifficulty();
   }
 }
 
-// Update Spaceship Position
+
 function updateSpaceshipPosition() {
   if (keysPressed.ArrowLeft && spaceshipX > 0) spaceshipX -= speed;
   if (keysPressed.ArrowRight && spaceshipX < window.innerWidth - 50) spaceshipX += speed;
@@ -246,7 +253,7 @@ function updateSpaceshipPosition() {
   spaceship.style.top = `${spaceshipY}px`;
 }
 
-// Game Loop
+
 function gameLoop() {
   frameCount++;
 
@@ -261,13 +268,13 @@ function gameLoop() {
   requestAnimationFrame(gameLoop);
 }
 
-// Initialize
+
 createAsteroids();
 applyLevelColors();
 updateSpaceshipPosition();
 gameLoop();
 
-// Event Listeners for Key Press
+
 document.addEventListener('keydown', (e) => {
   if (keysPressed[e.key] !== undefined) keysPressed[e.key] = true;
 });
