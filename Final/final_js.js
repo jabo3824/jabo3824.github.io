@@ -21,7 +21,7 @@ document.body.appendChild(banner);
 
 let spaceshipX = window.innerWidth / 2;
 let spaceshipY = window.innerHeight - 70;
-let speed = 10;
+let speed = 8;
 let acceleration = 0.7;
 let keysPressed = { W: false, A: false, S: false, D: false };
 
@@ -39,8 +39,8 @@ let treasures = [];
 
 
 const baseAsteroidSpeed = {
-  small: 6,
-  large: 5,
+  small: 5,
+  large: 4,
 };
 
 
@@ -257,44 +257,6 @@ function updateSpaceshipPosition() {
   spaceship.style.top = `${spaceshipY}px`;
 }
 
-
-
-function gameLoop() {
-  frameCount++;
-
-  updateSpaceshipPosition();
-  updateAsteroids();
-  updateTreasures();
-
-  if (frameCount % treasureSpawnInterval === 0) {
-    createTreasure();
-  }
-
-  requestAnimationFrame(gameLoop);
-}
-
-
-const startScreen = document.getElementById('start-screen');
-const startButton = document.getElementById('start-button');
-
-startButton.addEventListener('click', () => {
-  startScreen.style.display = 'none'; 
-  startGame(); 
-});
-
-
-document.addEventListener('keydown', (e) => {
-  const key = e.key.toUpperCase(); 
-  if (keysPressed[key] !== undefined) keysPressed[key] = true;
-});
-
-document.addEventListener('keyup', (e) => {
-  const key = e.key.toUpperCase(); 
-  if (keysPressed[key] !== undefined) keysPressed[key] = false;
-});
-
-let spaceshipAngle = 0; 
-
 function updateSpaceshipPosition() {
   let moving = false; 
 
@@ -347,6 +309,47 @@ function updateSpaceshipPosition() {
   spaceship.style.left = `${spaceshipX}px`;
   spaceship.style.top = `${spaceshipY}px`;
 }
+
+
+
+
+function gameLoop() {
+  frameCount++;
+
+  updateSpaceshipPosition();
+  updateAsteroids();
+  updateTreasures();
+
+  if (frameCount % treasureSpawnInterval === 0) {
+    createTreasure();
+  }
+
+  requestAnimationFrame(gameLoop);
+}
+
+
+const startScreen = document.getElementById('start-screen');
+const startButton = document.getElementById('start-button');
+
+startButton.addEventListener('click', () => {
+  startScreen.style.display = 'none'; 
+  startGame(); 
+});
+
+
+document.addEventListener('keydown', (e) => {
+  const key = e.key.toUpperCase(); 
+  if (keysPressed[key] !== undefined) keysPressed[key] = true;
+});
+
+document.addEventListener('keyup', (e) => {
+  const key = e.key.toUpperCase(); 
+  if (keysPressed[key] !== undefined) keysPressed[key] = false;
+});
+
+let spaceshipAngle = 0; 
+
+
 
 function startGame() {
   createAsteroids();
