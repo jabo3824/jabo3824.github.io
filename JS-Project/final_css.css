@@ -18,87 +18,6 @@ body {
   background-repeat: no-repeat;
 }
 
-#spaceship {
-  position: absolute;
-  width: 80px;
-  height: 80px;
-  background-image: url('/img/spaceship-svgrepo-com.png');
-  background-size: contain;
-  background-position: center;
-}
-
-.asteroid {
-  position: absolute;
-  background-image: url('/img/asteroid1.png');
-  background-size: contain;
-  background-repeat: no-repeat;
-  width: 40px;
-  height: 40px;
-  filter: hue-rotate(0deg);
-  transition: filter 0.3s ease;
-  border-radius: 50%
-}
-
-.large-asteroid {
-  width: 60px;
-  height: 60px;
-}
-
-.level-1 {
-  filter: none;
-}
-
-.level-2 {
-  filter: hue-rotate(120deg);
-}
-
-.level-3 {
-  filter: hue-rotate(240deg);
-}
-
-.level-4 {
-  filter: hue-rotate(60deg);
-}
-
-.treasure {
-  position: absolute;
-  width: 40px;
-  height: 40px;
-  background: transparent;
-  clip-path: polygon(
-    50% 0%, 
-    61% 35%, 
-    98% 35%, 
-    68% 57%, 
-    79% 91%, 
-    50% 70%, 
-    21% 91%, 
-    32% 57%, 
-    2% 35%, 
-    39% 35%
-  );
-  background-color: gold;
-  box-shadow: 0 0 20px gold;
-}
-
-#banner {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 20px 40px;
-  font-size: 24px;
-  font-family: Arial, sans-serif;
-  text-align: center;
-  z-index: 1000;
-  display: none;
-  border: 2px solid #fff;
-  border-radius: 8px;
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
-}
-
 #start-screen {
   position: absolute;
   top: 0;
@@ -140,6 +59,71 @@ body {
   max-width: 80%;
 }
 
+#spaceship {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  background-image: url('/img/spaceship-svgrepo-com.png');
+  background-size: contain;
+  background-position: center;
+}
+
+#banner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 20px 40px;
+  font-size: 24px;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  z-index: 1000;
+  display: none;
+  border: 2px solid #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+.asteroid {
+  position: absolute;
+  background-image: url('/img/asteroid1.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 40px;
+  height: 40px;
+  filter: hue-rotate(0deg);
+  transition: filter 0.3s ease;
+  border-radius: 50%
+}
+
+.large-asteroid {
+  width: 60px;
+  height: 60px;
+}
+
+.treasure {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  clip-path: polygon(
+    50% 0%, 
+    61% 35%, 
+    98% 35%, 
+    68% 57%, 
+    79% 91%, 
+    50% 70%, 
+    21% 91%, 
+    32% 57%, 
+    2% 35%, 
+    39% 35%
+  );
+  background-color: gold;
+  box-shadow: 0 0 20px gold;
+}
+
 #scoreboard {
   position: fixed;
   top: 20px;
@@ -168,4 +152,20 @@ body {
 #scoreboard span {
   font-weight: bold;
   color: white;
+}
+
+.level-1 {
+  filter: none;
+}
+
+.level-2 {
+  filter: hue-rotate(120deg);
+}
+
+.level-3 {
+  filter: hue-rotate(240deg);
+}
+
+.level-4 {
+  filter: hue-rotate(60deg);
 }
