@@ -31,7 +31,7 @@ let frameCount = 0;
 
 let currentLevel = 1;
 const largeAsteroidChance = 0.3;
-let treasureSpawnInterval = 200;
+let treasureSpawnInterval = 100;
 
 const asteroids = [];
 const asteroidCount = 35;
@@ -39,8 +39,8 @@ let treasures = [];
 
 
 const baseAsteroidSpeed = {
-  small: 4,
-  large: 3,
+  small: 6,
+  large: 5,
 };
 
 
@@ -244,7 +244,7 @@ function updateScore() {
   document.getElementById('score').textContent = score;
 
   
-  if (score >= 500 * currentLevel) {
+  if (score >= 1000 * currentLevel) {
     increaseDifficulty();
   }
 }
@@ -302,3 +302,58 @@ document.addEventListener('keyup', (e) => {
   const key = e.key.toUpperCase(); 
   if (keysPressed[key] !== undefined) keysPressed[key] = false;
 });
+
+let spaceshipAngle = 0; 
+
+function updateSpaceshipPosition() {
+  let moving = false; 
+
+  
+  if (keysPressed.W && keysPressed.A) { 
+    spaceshipY -= speed;
+    spaceshipX -= speed;
+    spaceshipAngle = -45; 
+    moving = true;
+  } else if (keysPressed.W && keysPressed.D) { 
+    spaceshipY -= speed;
+    spaceshipX += speed;
+    spaceshipAngle = 45; 
+    moving = true;
+  } else if (keysPressed.S && keysPressed.A) { 
+    spaceshipY += speed;
+    spaceshipX -= speed;
+    spaceshipAngle = -135; 
+    moving = true;
+  } else if (keysPressed.S && keysPressed.D) { 
+    spaceshipY += speed;
+    spaceshipX += speed;
+    spaceshipAngle = 135; 
+    moving = true;
+  } else if (keysPressed.W) { 
+    spaceshipY -= speed;
+    spaceshipAngle = 0;
+    moving = true;
+  } else if (keysPressed.S) { 
+    spaceshipY += speed;
+    spaceshipAngle = 180;
+    moving = true;
+  } else if (keysPressed.A) { 
+    spaceshipX -= speed;
+    spaceshipAngle = -90;
+    moving = true;
+  } else if (keysPressed.D) { 
+    spaceshipX += speed;
+    spaceshipAngle = 90;
+    moving = true;
+  }
+
+  
+  if (!moving) {
+    spaceshipAngle = 0; 
+  }
+
+  
+  spaceship.style.transform = `rotate(${spaceshipAngle}deg)`;
+  spaceship.style.left = `${spaceshipX}px`;
+  spaceship.style.top = `${spaceshipY}px`;
+}
