@@ -297,22 +297,22 @@ function updateSpaceshipPosition() {
     moving = true;
   }
 
-  // Reset orientation when no keys are pressed
+  
   if (!moving) {
-    spaceshipAngle = 0; // Reset to upward orientation
+    spaceshipAngle = 0; 
   }
 
   const screenWidth = window.innerWidth;
 
-  // Horizontal wrap-around only
+  
   if (spaceshipX < 0) spaceshipX = screenWidth - 50;
   if (spaceshipX > screenWidth - 50) spaceshipX = 0;
 
-  // Vertical boundaries (no wrap-around)
+  
   if (spaceshipY < 0) spaceshipY = 0;
   if (spaceshipY > window.innerHeight - 50) spaceshipY = window.innerHeight - 50;
 
-  // Apply position and orientation to the spaceship
+  
   spaceship.style.transform = `rotate(${spaceshipAngle}deg)`;
   spaceship.style.left = `${spaceshipX}px`;
   spaceship.style.top = `${spaceshipY}px`;
