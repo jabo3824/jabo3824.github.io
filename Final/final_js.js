@@ -46,7 +46,7 @@ const baseAsteroidSpeed = {
 
 const dynamicAsteroidSpeedAdjustment = {
   forward: 2,
-  backward: -1,
+  backward: -2,
 };
 
 
@@ -68,6 +68,31 @@ function showBanner(message) {
   setTimeout(() => {
     banner.style.display = 'none';
   }, 2000);
+}
+
+function createAsteroids() {
+  for (let i = 0; i < asteroidCount; i++) {
+    const asteroid = document.createElement('div');
+    asteroid.classList.add('asteroid');
+
+    const isLarge = Math.random() < largeAsteroidChance;
+    if (isLarge) asteroid.classList.add('large-asteroid');
+
+    
+    asteroid.style.left = `${Math.random() * (window.innerWidth - 50)}px`;
+    asteroid.style.top = `${-Math.random() * 500}px`;
+
+    
+    asteroid.classList.add('level-1');
+
+    gameContainer.appendChild(asteroid);
+
+    asteroids.push({
+      element: asteroid,
+      speed: isLarge ? baseAsteroidSpeed.large : baseAsteroidSpeed.small,
+      size: isLarge ? 'large' : 'small',
+    });
+  }
 }
 
 
@@ -101,34 +126,6 @@ function applyLevelColors() {
     });
   }
 }
-
-
-function createAsteroids() {
-  for (let i = 0; i < asteroidCount; i++) {
-    const asteroid = document.createElement('div');
-    asteroid.classList.add('asteroid');
-
-    const isLarge = Math.random() < largeAsteroidChance;
-    asteroid.classList.toggle('large-asteroid', isLarge);
-
-    asteroid.style.left = `${Math.random() * (window.innerWidth - 50)}px`;
-    asteroid.style.top = `${-Math.random() * 500}px`;
-    asteroid.style.backgroundColor = isLarge
-      ? levelColors[currentLevel].largeAsteroid
-      : levelColors[currentLevel].smallAsteroid;
-
-    gameContainer.appendChild(asteroid);
-
-    asteroids.push({
-      element: asteroid,
-      speed: isLarge ? baseAsteroidSpeed.large : baseAsteroidSpeed.small,
-      size: isLarge ? 'large' : 'small',
-    });
-  }
-}
-
-
-
 
 function createTreasure() {
   const treasure = document.createElement('div');
@@ -244,7 +241,7 @@ function updateScore() {
   document.getElementById('score').textContent = score;
 
   
-  if (score >= 1000 * currentLevel) {
+  if (score >= 100 * currentLevel) {
     increaseDifficulty();
   }
 }
@@ -357,3 +354,4 @@ function updateSpaceshipPosition() {
   spaceship.style.left = `${spaceshipX}px`;
   spaceship.style.top = `${spaceshipY}px`;
 }
+
