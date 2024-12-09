@@ -39,7 +39,7 @@ let treasures = [];
 
 
 const baseAsteroidSpeed = {
-  small: 5,
+  small: 3,
   large: 4,
 };
 
@@ -227,7 +227,15 @@ function checkCollision(a, b) {
 
 
 function updateHealth() {
-  document.getElementById('health').textContent = health;
+  const healthElement = document.getElementById('health');
+  healthElement.textContent = health;
+
+  if (health <= 30) {
+    healthElement.style.color = 'red'; 
+  } else {
+    healthElement.style.color = 'white'; 
+  }
+
   if (health <= 0) {
     showBanner(`Game Over! Final Score: ${score}`);
     setTimeout(() => {
@@ -235,6 +243,7 @@ function updateHealth() {
     }, 2000);
   }
 }
+
 
 
 function updateScore() {
@@ -257,58 +266,64 @@ function updateSpaceshipPosition() {
   spaceship.style.top = `${spaceshipY}px`;
 }
 
-function updateSpaceshipPosition() {
-  let moving = false; 
 
-  
-  if (keysPressed.W && keysPressed.A) { 
+function updateSpaceshipPosition() {
+  let moving = false;
+
+  if (keysPressed.W && keysPressed.A) {
     spaceshipY -= speed;
     spaceshipX -= speed;
-    spaceshipAngle = -45; 
+    spaceshipAngle = -45;
     moving = true;
-  } else if (keysPressed.W && keysPressed.D) { 
+  } else if (keysPressed.W && keysPressed.D) {
     spaceshipY -= speed;
     spaceshipX += speed;
-    spaceshipAngle = 45; 
+    spaceshipAngle = 45;
     moving = true;
-  } else if (keysPressed.S && keysPressed.A) { 
+  } else if (keysPressed.S && keysPressed.A) {
     spaceshipY += speed;
     spaceshipX -= speed;
-    spaceshipAngle = -135; 
+    spaceshipAngle = -135;
     moving = true;
-  } else if (keysPressed.S && keysPressed.D) { 
+  } else if (keysPressed.S && keysPressed.D) {
     spaceshipY += speed;
     spaceshipX += speed;
-    spaceshipAngle = 135; 
+    spaceshipAngle = 135;
     moving = true;
-  } else if (keysPressed.W) { 
+  } else if (keysPressed.W) {
     spaceshipY -= speed;
     spaceshipAngle = 0;
     moving = true;
-  } else if (keysPressed.S) { 
+  } else if (keysPressed.S) {
     spaceshipY += speed;
     spaceshipAngle = 180;
     moving = true;
-  } else if (keysPressed.A) { 
+  } else if (keysPressed.A) {
     spaceshipX -= speed;
     spaceshipAngle = -90;
     moving = true;
-  } else if (keysPressed.D) { 
+  } else if (keysPressed.D) {
     spaceshipX += speed;
     spaceshipAngle = 90;
     moving = true;
   }
 
-  
-  if (!moving) {
-    spaceshipAngle = 0; 
-  }
+  const screenWidth = window.innerWidth;
 
   
+  if (spaceshipX < 0) spaceshipX = screenWidth - 50;
+  if (spaceshipX > screenWidth - 50) spaceshipX = 0;
+
+  
+  if (spaceshipY < 0) spaceshipY = 0;
+  if (spaceshipY > window.innerHeight - 50) spaceshipY = window.innerHeight - 50;
+
   spaceship.style.transform = `rotate(${spaceshipAngle}deg)`;
   spaceship.style.left = `${spaceshipX}px`;
   spaceship.style.top = `${spaceshipY}px`;
 }
+
+
 
 
 

@@ -145,3 +145,32 @@ body {
   max-width: 80%;
 }
 
+#scoreboard {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: space-around;
+  width: 300px;
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 2px solid #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+  padding: 10px 0;
+  color: white;
+  font-family: Arial, sans-serif;
+  font-size: 20px;
+  text-align: center;
+  z-index: 1000;
+}
+
+#scoreboard p {
+  margin: 0;
+  padding: 0 10px;
+}
+
+#scoreboard span {
+  font-weight: bold;
+  color: white;
+}
