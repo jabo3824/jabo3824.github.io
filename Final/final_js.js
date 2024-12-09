@@ -282,13 +282,6 @@ startButton.addEventListener('click', () => {
   startGame(); 
 });
 
-function startGame() {
-  createAsteroids();
-  applyLevelColors();
-  updateSpaceshipPosition();
-  gameLoop();
-}
-
 
 document.addEventListener('keydown', (e) => {
   const key = e.key.toUpperCase(); 
@@ -355,3 +348,9 @@ function updateSpaceshipPosition() {
   spaceship.style.top = `${spaceshipY}px`;
 }
 
+function startGame() {
+  createAsteroids();
+  applyLevelColors();
+  updateSpaceshipPosition();
+  gameLoop();
+}
