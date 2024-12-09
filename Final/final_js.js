@@ -241,7 +241,7 @@ function updateScore() {
   document.getElementById('score').textContent = score;
 
   
-  if (score >= 100 * currentLevel) {
+  if (score >= 500 * currentLevel) {
     increaseDifficulty();
   }
 }
