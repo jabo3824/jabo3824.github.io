@@ -18,7 +18,7 @@ banner.style.cssText = `
 `;
 document.body.appendChild(banner);
 
-
+let spaceshipAngle = 0;
 let spaceshipX = window.innerWidth / 2;
 let spaceshipY = window.innerHeight - 70;
 let speed = 8;
@@ -37,24 +37,40 @@ const asteroids = [];
 const asteroidCount = 35;
 let treasures = [];
 
-
 const baseAsteroidSpeed = {
   small: 3,
   large: 4,
 };
-
 
 const dynamicAsteroidSpeedAdjustment = {
   forward: 2,
   backward: -2,
 };
 
-
 const levelColors = {
   1: { background: '#000020', smallAsteroid: '#ff5733', largeAsteroid: '#c70039' },
   2: { background: '#001a33', smallAsteroid: '#33ff57', largeAsteroid: '#39c700' },
   3: { background: '#33001a', smallAsteroid: '#5733ff', largeAsteroid: '#0039c7' },
 };
+
+const startScreen = document.getElementById('start-screen');
+const startButton = document.getElementById('start-button');
+
+startButton.addEventListener('click', () => {
+  startScreen.style.display = 'none'; 
+  startGame(); 
+});
+
+
+document.addEventListener('keydown', (e) => {
+  const key = e.key.toUpperCase(); 
+  if (keysPressed[key] !== undefined) keysPressed[key] = true;
+});
+
+document.addEventListener('keyup', (e) => {
+  const key = e.key.toUpperCase(); 
+  if (keysPressed[key] !== undefined) keysPressed[key] = false;
+});
 
 function showStartScreen() {
   startScreen.style.display = 'flex';
@@ -95,75 +111,6 @@ function createAsteroids() {
   }
 }
 
-
-function increaseDifficulty() {
-  currentLevel++;
-  treasureSpawnInterval = Math.max(treasureSpawnInterval - 20, 50); 
-
-  health = 100;
-  updateHealth();
-
-  
-  asteroids.forEach((asteroid) => {
-    asteroid.speed += 1;
-  });
-
-  applyLevelColors(); 
-  showBanner(`Welcome to Level ${currentLevel}!`);
-}
-
-
-function applyLevelColors() {
-  const colors = levelColors[currentLevel % Object.keys(levelColors).length + 1] || levelColors[1];
-  if (colors) {
-    
-    gameContainer.style.backgroundColor = colors.background;
-
-    
-    asteroids.forEach((asteroid) => {
-      asteroid.element.style.backgroundColor =
-        asteroid.size === 'large' ? colors.largeAsteroid : colors.smallAsteroid;
-    });
-  }
-}
-
-function createTreasure() {
-  const treasure = document.createElement('div');
-  treasure.classList.add('treasure');
-
-  const minY = window.innerHeight * 0.3;
-  const maxY = window.innerHeight - 100;
-
-  treasure.style.left = `${Math.random() * (window.innerWidth - 50)}px`;
-  treasure.style.top = `${Math.random() * (maxY - minY) + minY}px`;
-  gameContainer.appendChild(treasure);
-
-  treasures.push({
-    element: treasure,
-    timer: 200,
-  });
-}
-
-
-function updateTreasures() {
-  treasures.forEach((treasure, index) => {
-    treasure.timer--;
-
-    if (checkCollision(treasure.element, spaceship)) {
-      score += 100;
-      updateScore();
-      treasure.element.remove();
-      treasures.splice(index, 1);
-    }
-
-    if (treasure.timer <= 0) {
-      treasure.element.remove();
-      treasures.splice(index, 1);
-    }
-  });
-}
-
-
 function updateAsteroids() {
   const playerDirection = getPlayerDirection();
 
@@ -193,15 +140,6 @@ function updateAsteroids() {
   });
 }
 
-
-
-function getPlayerDirection() {
-  if (keysPressed.W) return 'forward'; 
-  if (keysPressed.S) return 'backward'; 
-  return 'idle'; 
-}
-
-
 function respawnAsteroid(asteroid) {
   asteroid.element.style.top = `${-Math.random() * 500}px`; 
   asteroid.element.style.left = `${Math.random() * (window.innerWidth - 50)}px`;
@@ -212,7 +150,76 @@ function respawnAsteroid(asteroid) {
     asteroid.size === 'large' ? colors.largeAsteroid : colors.smallAsteroid;
 }
 
+function createTreasure() {
+  const treasure = document.createElement('div');
+  treasure.classList.add('treasure');
 
+  const minY = window.innerHeight * 0.3;
+  const maxY = window.innerHeight - 100;
+
+  treasure.style.left = `${Math.random() * (window.innerWidth - 50)}px`;
+  treasure.style.top = `${Math.random() * (maxY - minY) + minY}px`;
+  gameContainer.appendChild(treasure);
+
+  treasures.push({
+    element: treasure,
+    timer: 200,
+  });
+}
+
+function updateTreasures() {
+  treasures.forEach((treasure, index) => {
+    treasure.timer--;
+
+    if (checkCollision(treasure.element, spaceship)) {
+      score += 100;
+      updateScore();
+      treasure.element.remove();
+      treasures.splice(index, 1);
+    }
+
+    if (treasure.timer <= 0) {
+      treasure.element.remove();
+      treasures.splice(index, 1);
+    }
+  });
+}
+
+function increaseDifficulty() {
+  currentLevel++;
+  treasureSpawnInterval = Math.max(treasureSpawnInterval - 20, 50); 
+
+  health = 100;
+  updateHealth();
+
+  
+  asteroids.forEach((asteroid) => {
+    asteroid.speed += 1;
+  });
+
+  applyLevelColors(); 
+  showBanner(`Welcome to Level ${currentLevel}!`);
+}
+
+function applyLevelColors() {
+  const colors = levelColors[currentLevel % Object.keys(levelColors).length + 1] || levelColors[1];
+  if (colors) {
+    
+    gameContainer.style.backgroundColor = colors.background;
+
+    
+    asteroids.forEach((asteroid) => {
+      asteroid.element.style.backgroundColor =
+        asteroid.size === 'large' ? colors.largeAsteroid : colors.smallAsteroid;
+    });
+  }
+}
+
+function getPlayerDirection() {
+  if (keysPressed.W) return 'forward'; 
+  if (keysPressed.S) return 'backward'; 
+  return 'idle'; 
+}
 
 function checkCollision(a, b) {
   const rect1 = a.getBoundingClientRect();
@@ -224,7 +231,6 @@ function checkCollision(a, b) {
     rect1.right < rect2.left
   );
 }
-
 
 function updateHealth() {
   const healthElement = document.getElementById('health');
@@ -244,8 +250,6 @@ function updateHealth() {
   }
 }
 
-
-
 function updateScore() {
   document.getElementById('score').textContent = score;
 
@@ -254,7 +258,6 @@ function updateScore() {
     increaseDifficulty();
   }
 }
-
 
 function updateSpaceshipPosition() {
   let moving = false;
@@ -318,11 +321,12 @@ function updateSpaceshipPosition() {
   spaceship.style.top = `${spaceshipY}px`;
 }
 
-
-
-
-
-
+function startGame() {
+  createAsteroids();
+  applyLevelColors();
+  updateSpaceshipPosition();
+  gameLoop();
+}
 
 function gameLoop() {
   frameCount++;
@@ -336,35 +340,4 @@ function gameLoop() {
   }
 
   requestAnimationFrame(gameLoop);
-}
-
-
-const startScreen = document.getElementById('start-screen');
-const startButton = document.getElementById('start-button');
-
-startButton.addEventListener('click', () => {
-  startScreen.style.display = 'none'; 
-  startGame(); 
-});
-
-
-document.addEventListener('keydown', (e) => {
-  const key = e.key.toUpperCase(); 
-  if (keysPressed[key] !== undefined) keysPressed[key] = true;
-});
-
-document.addEventListener('keyup', (e) => {
-  const key = e.key.toUpperCase(); 
-  if (keysPressed[key] !== undefined) keysPressed[key] = false;
-});
-
-let spaceshipAngle = 0; 
-
-
-
-function startGame() {
-  createAsteroids();
-  applyLevelColors();
-  updateSpaceshipPosition();
-  gameLoop();
 }
