@@ -257,17 +257,6 @@ function updateScore() {
 
 
 function updateSpaceshipPosition() {
-  if (keysPressed.A && spaceshipX > 0) spaceshipX -= speed; 
-  if (keysPressed.D && spaceshipX < window.innerWidth - 50) spaceshipX += speed; 
-  if (keysPressed.W && spaceshipY > 0) spaceshipY -= speed; 
-  if (keysPressed.S && spaceshipY < window.innerHeight - 50) spaceshipY += speed; 
-
-  spaceship.style.left = `${spaceshipX}px`;
-  spaceship.style.top = `${spaceshipY}px`;
-}
-
-
-function updateSpaceshipPosition() {
   let moving = false;
 
   if (keysPressed.W && keysPressed.A) {
@@ -308,20 +297,27 @@ function updateSpaceshipPosition() {
     moving = true;
   }
 
+  // Reset orientation when no keys are pressed
+  if (!moving) {
+    spaceshipAngle = 0; // Reset to upward orientation
+  }
+
   const screenWidth = window.innerWidth;
 
-  
+  // Horizontal wrap-around only
   if (spaceshipX < 0) spaceshipX = screenWidth - 50;
   if (spaceshipX > screenWidth - 50) spaceshipX = 0;
 
-  
+  // Vertical boundaries (no wrap-around)
   if (spaceshipY < 0) spaceshipY = 0;
   if (spaceshipY > window.innerHeight - 50) spaceshipY = window.innerHeight - 50;
 
+  // Apply position and orientation to the spaceship
   spaceship.style.transform = `rotate(${spaceshipAngle}deg)`;
   spaceship.style.left = `${spaceshipX}px`;
   spaceship.style.top = `${spaceshipY}px`;
 }
+
 
 
 
