@@ -21,7 +21,7 @@ document.body.appendChild(banner);
 let spaceshipAngle = 0;
 let spaceshipX = window.innerWidth / 2;
 let spaceshipY = window.innerHeight - 70;
-let speed = 8;
+let speed = 5;
 let acceleration = 0.7;
 let keysPressed = { W: false, A: false, S: false, D: false };
 
