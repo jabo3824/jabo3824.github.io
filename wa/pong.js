@@ -15,14 +15,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     startButton.addEventListener('click', () => {
         score = 0;
-        ballSpeed = 2; 
+        ballSpeed = 2;
         scoreDisplay.textContent = 'Score: 0';
         startButton.style.display = 'none';
         gameActive = true;
+      
+        
+        basket.style.left = (gameContainer.clientWidth - basket.clientWidth) / 2 + 'px';
+      
         resetBall();
-        dropBall();
-        moveBasket(); 
-    });
+        dropBall();           
+        moveBasket();
+      });
+      
 
     document.addEventListener('keydown', (e) => {
         if (!gameActive) return;
@@ -37,29 +42,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function moveBasket() {
         if (!gameActive) return;
-
+    
         const basketLeft = parseInt(window.getComputedStyle(basket).getPropertyValue('left'));
         const containerWidth = gameContainer.clientWidth;
-
+    
         if (movingLeft) {
             if (basketLeft <= 0) {
-                basket.style.left = (containerWidth - basket.clientWidth) + 'px'; 
+                basket.style.left = (containerWidth - basket.clientWidth) + 'px';
             } else {
                 basket.style.left = (basketLeft - basketSpeed) + 'px';
             }
         }
         if (movingRight) {
             if (basketLeft >= containerWidth - basket.clientWidth) {
-                basket.style.left = '0px'; 
+                basket.style.left = '0px';
             } else {
                 basket.style.left = (basketLeft + basketSpeed) + 'px';
             }
         }
-
-        if (movingLeft || movingRight) {
-            requestAnimationFrame(moveBasket); 
-        }
+    
+        
+        requestAnimationFrame(moveBasket);
     }
+    
 
     function dropBall() {
         if (!gameActive) return;
