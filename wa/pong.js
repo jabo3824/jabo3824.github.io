@@ -43,14 +43,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (movingLeft) {
             if (basketLeft <= 0) {
-                basket.style.left = (containerWidth - basket.clientWidth) + 'px'; // Teleport to the right edge
+                basket.style.left = (containerWidth - basket.clientWidth) + 'px'; 
             } else {
                 basket.style.left = (basketLeft - basketSpeed) + 'px';
             }
         }
         if (movingRight) {
             if (basketLeft >= containerWidth - basket.clientWidth) {
-                basket.style.left = '0px'; // Teleport to the left edge
+                basket.style.left = '0px'; 
             } else {
                 basket.style.left = (basketLeft + basketSpeed) + 'px';
             }
@@ -92,8 +92,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function resetBall() {
         ball.style.top = '0px';
         ball.style.left = Math.random() * (gameContainer.clientWidth - ball.clientWidth) + 'px';
-        dropBall(); 
+        
     }
+    
 
     function resetGame() {
         gameActive = false;
