@@ -148,11 +148,17 @@ function animateToLocation(location) {
     const lat = location.lat;
     const lon = location.lon;
     
-    targetRotation.y = -lon * (Math.PI / 180);
     targetRotation.x = lat * (Math.PI / 180);
+    targetRotation.y = -(lon * (Math.PI / 180));
     
     isAnimatingToLocation = true;
     rotationVelocity = { x: 0, y: 0 };
+}
+
+function normalizeAngle(angle) {
+    while (angle > Math.PI) angle -= 2 * Math.PI;
+    while (angle < -Math.PI) angle += 2 * Math.PI;
+    return angle;
 }
 
 function showLocationInfo(location) {
@@ -177,8 +183,8 @@ function animate() {
     requestAnimationFrame(animate);
     
     if (isAnimatingToLocation) {
-        const dx = targetRotation.x - globe.rotation.x;
-        const dy = targetRotation.y - globe.rotation.y;
+        let dx = normalizeAngle(targetRotation.x - globe.rotation.x);
+        let dy = normalizeAngle(targetRotation.y - globe.rotation.y);
         
         globe.rotation.x += dx * 0.1;
         globe.rotation.y += dy * 0.1;
