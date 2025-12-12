@@ -208,7 +208,7 @@ function animate() {
             isAnimatingToLocation = false;
         }
     } else if (!isDragging && autoRotate) {
-        globe.rotation.y += 0.002;
+        globe.rotation.y += 0.001;
     } else if (!isDragging) {
         rotationVelocity.x *= 0.95;
         rotationVelocity.y *= 0.95;
