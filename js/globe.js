@@ -55,7 +55,7 @@ function init() {
     container.appendChild(renderer.domElement);
 
     const textureLoader = new THREE.TextureLoader();
-    const texture = textureLoader.load('/img/earth-texture-2.jpg');
+    const texture = textureLoader.load('/img/earth-texture.jpg');
 
     const globeGeometry = new THREE.SphereGeometry(1, 64, 64);
     const globeMaterial = new THREE.MeshPhongMaterial({
