@@ -148,8 +148,8 @@ function animateToLocation(location) {
     const lat = location.lat;
     const lon = location.lon;
     
-    targetRotation.x = lat * (Math.PI / 180);
-    targetRotation.y = -(lon * (Math.PI / 180));
+    targetRotation.x = -lat * (Math.PI / 180);
+    targetRotation.y = (lon * (Math.PI / 180)) + Math.PI;
     
     isAnimatingToLocation = true;
     rotationVelocity = { x: 0, y: 0 };
