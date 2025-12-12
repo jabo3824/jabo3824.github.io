@@ -148,14 +148,18 @@ function animateToLocation(location) {
     const lat = location.lat;
     const lon = location.lon;
     
-    // Match the coordinate system used in latLonToVector3
-    // We need to rotate the globe the opposite way the point is positioned
+    // Calculate where the point currently is in 3D space
     const phi = (90 - lat) * (Math.PI / 180);
     const theta = (lon + 180) * (Math.PI / 180);
     
-    // Rotate globe to bring point to front - try inverting both
-    targetRotation.y = theta;
-    targetRotation.x = -(phi - Math.PI / 2);
+    // Calculate the rotation needed from current globe rotation
+    // to bring this point to face the camera (0, 0, positive Z)
+    const currentRotY = globe.rotation.y;
+    const currentRotX = globe.rotation.x;
+    
+    // Target rotation to center the point
+    targetRotation.y = currentRotY + theta - Math.PI;
+    targetRotation.x = currentRotX - (phi - Math.PI / 2);
     
     isAnimatingToLocation = true;
     rotationVelocity = { x: 0, y: 0 };
