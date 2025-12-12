@@ -148,9 +148,9 @@ function animateToLocation(location) {
     const lat = location.lat;
     const lon = location.lon;
     
-    // Simple direct calculation with 180 flip to face camera
-    targetRotation.x = lat * Math.PI / 180;
-    targetRotation.y = (-lon * Math.PI / 180) + Math.PI;
+    // Rotate to center the location
+    targetRotation.x = -lat * Math.PI / 180;
+    targetRotation.y = lon * Math.PI / 180;
     
     isAnimatingToLocation = true;
     rotationVelocity = { x: 0, y: 0 };
