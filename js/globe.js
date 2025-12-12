@@ -148,9 +148,14 @@ function animateToLocation(location) {
     const lat = location.lat;
     const lon = location.lon;
     
-    // Calculate rotation to bring location to front center
-    targetRotation.y = (lon * (Math.PI / 180));
-    targetRotation.x = -lat * (Math.PI / 180);
+    // Match the coordinate system used in latLonToVector3
+    // We need to rotate the globe the opposite way the point is positioned
+    const phi = (90 - lat) * (Math.PI / 180);
+    const theta = (lon + 180) * (Math.PI / 180);
+    
+    // Rotate globe to bring point to front
+    targetRotation.y = -theta;
+    targetRotation.x = phi - Math.PI / 2;
     
     isAnimatingToLocation = true;
     rotationVelocity = { x: 0, y: 0 };
