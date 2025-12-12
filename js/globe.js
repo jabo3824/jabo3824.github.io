@@ -145,11 +145,11 @@ function onClick() {
 }
 
 function animateToLocation(location) {
-    const phi = (90 - location.lat) * (Math.PI / 180);
-    const theta = (location.lon + 180) * (Math.PI / 180);
+    const lat = location.lat;
+    const lon = location.lon;
     
-    targetRotation.x = -(phi - Math.PI / 2);
-    targetRotation.y = theta + Math.PI;
+    targetRotation.y = -lon * (Math.PI / 180);
+    targetRotation.x = lat * (Math.PI / 180);
     
     isAnimatingToLocation = true;
     rotationVelocity = { x: 0, y: 0 };
