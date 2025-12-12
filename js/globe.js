@@ -148,8 +148,10 @@ function animateToLocation(location) {
     const lat = location.lat;
     const lon = location.lon;
     
+    // Calculate rotation to bring location to front center
+    // We need to rotate the globe so the point faces the camera at (0, 0, z)
+    targetRotation.y = -lon * (Math.PI / 180);
     targetRotation.x = -lat * (Math.PI / 180);
-    targetRotation.y = (lon * (Math.PI / 180)) + Math.PI;
     
     isAnimatingToLocation = true;
     rotationVelocity = { x: 0, y: 0 };
