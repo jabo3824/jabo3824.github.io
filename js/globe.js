@@ -151,7 +151,7 @@ function animateToLocation(location, marker) {
     // Calculate the angles this point makes
     // We want to rotate the globe so this point is at (0, 0, positive z) facing camera
     const targetY = -Math.atan2(basePos.x, basePos.z);
-    const targetX = -Math.asin(basePos.y / 1.02);
+    const targetX = Math.asin(basePos.y / 1.02);
     
     // Set absolute target rotation
     targetRotation.y = targetY;
