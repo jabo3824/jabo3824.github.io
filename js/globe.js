@@ -35,6 +35,54 @@ function latLonToVector3(lat, lon, radius) {
     return new THREE.Vector3(x, y, z);
 }
 
+function createPinMarker() {
+    const pinGroup = new THREE.Group();
+    
+    // Pin head (teardrop shape using sphere)
+    const headGeometry = new THREE.SphereGeometry(0.025, 16, 16);
+    const headMaterial = new THREE.MeshPhongMaterial({
+        color: 0x829CB2,
+        shininess: 100,
+        specular: 0xffffff
+    });
+    const head = new THREE.Mesh(headGeometry, headMaterial);
+    head.position.y = 0.04;
+    pinGroup.add(head);
+    
+    // Pin stem
+    const stemGeometry = new THREE.CylinderGeometry(0.006, 0.006, 0.04, 8);
+    const stemMaterial = new THREE.MeshPhongMaterial({
+        color: 0x829CB2,
+        shininess: 80
+    });
+    const stem = new THREE.Mesh(stemGeometry, stemMaterial);
+    stem.position.y = 0.02;
+    pinGroup.add(stem);
+    
+    // Pin point (cone)
+    const pointGeometry = new THREE.ConeGeometry(0.008, 0.015, 8);
+    const pointMaterial = new THREE.MeshPhongMaterial({
+        color: 0x6b8a9f,
+        shininess: 100
+    });
+    const point = new THREE.Mesh(pointGeometry, pointMaterial);
+    point.position.y = 0.0075;
+    point.rotation.x = Math.PI;
+    pinGroup.add(point);
+    
+    // Inner white dot on pin head
+    const dotGeometry = new THREE.SphereGeometry(0.01, 8, 8);
+    const dotMaterial = new THREE.MeshBasicMaterial({
+        color: 0xffffff
+    });
+    const dot = new THREE.Mesh(dotGeometry, dotMaterial);
+    dot.position.y = 0.04;
+    dot.position.z = 0.02;
+    pinGroup.add(dot);
+    
+    return pinGroup;
+}
+
 function init() {
     const container = document.getElementById('globe-container');
     
@@ -67,18 +115,19 @@ function init() {
     scene.add(globe);
 
     locations.forEach((location) => {
-        const markerGeometry = new THREE.SphereGeometry(0.025, 16, 16);
-        const markerMaterial = new THREE.MeshBasicMaterial({
-            color: 0x829CB2
-        });
-        const marker = new THREE.Mesh(markerGeometry, markerMaterial);
+        const pin = createPinMarker();
         
-        const pos = latLonToVector3(location.lat, location.lon, 1.02);
-        marker.position.copy(pos);
-        marker.userData = { location };
+        const pos = latLonToVector3(location.lat, location.lon, 1.0);
+        pin.position.copy(pos);
         
-        scene.add(marker);
-        markers.push(marker);
+        // Orient pin to point outward from globe center
+        pin.lookAt(0, 0, 0);
+        pin.rotateX(Math.PI);
+        
+        pin.userData = { location };
+        
+        scene.add(pin);
+        markers.push(pin);
     });
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
@@ -132,10 +181,10 @@ function onMouseUp() {
 
 function onClick() {
     raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObjects(markers);
+    const intersects = raycaster.intersectObjects(markers, true);
     
     if (intersects.length > 0) {
-        const clickedMarker = intersects[0].object;
+        const clickedMarker = intersects[0].object.parent;
         const location = clickedMarker.userData.location;
         animateToLocation(location, clickedMarker);
         showLocationInfo(location);
@@ -145,26 +194,16 @@ function onClick() {
 }
 
 function animateToLocation(location, marker) {
-    // Get the marker's position in the unrotated globe space
     const basePos = latLonToVector3(location.lat, location.lon, 1.02);
     
-    // Calculate the angles this point makes
-    // We want to rotate the globe so this point is at (0, 0, positive z) facing camera
     const targetY = -Math.atan2(basePos.x, basePos.z);
     const targetX = Math.asin(basePos.y / 1.02);
     
-    // Set absolute target rotation
     targetRotation.y = targetY;
     targetRotation.x = targetX;
     
     isAnimatingToLocation = true;
     rotationVelocity = { x: 0, y: 0 };
-}
-
-function normalizeAngle(angle) {
-    while (angle > Math.PI) angle -= 2 * Math.PI;
-    while (angle < -Math.PI) angle += 2 * Math.PI;
-    return angle;
 }
 
 function showLocationInfo(location) {
@@ -209,16 +248,27 @@ function animate() {
 
     markers.forEach((marker, index) => {
         const location = locations[index];
-        const pos = latLonToVector3(location.lat, location.lon, 1.02);
+        const pos = latLonToVector3(location.lat, location.lon, 1.0);
         
         const matrix = new THREE.Matrix4();
         matrix.makeRotationFromEuler(globe.rotation);
         pos.applyMatrix4(matrix);
         
         marker.position.copy(pos);
+        
+        // Keep pins pointing outward
+        const direction = pos.clone().normalize();
+        marker.lookAt(direction.multiplyScalar(-10));
+        marker.rotateX(Math.PI);
     });
 
     renderer.render(scene, camera);
+}
+
+function normalizeAngle(angle) {
+    while (angle > Math.PI) angle -= 2 * Math.PI;
+    while (angle < -Math.PI) angle += 2 * Math.PI;
+    return angle;
 }
 
 init();
