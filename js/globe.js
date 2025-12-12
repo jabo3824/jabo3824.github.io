@@ -218,7 +218,7 @@ function animate() {
 
     markers.forEach((marker, index) => {
         const location = locations[index];
-        const pos = latLonToVector3(location.lat, location.lon, 1.0125);
+        const pos = latLonToVector3(location.lat, location.lon, 1);
         
         const matrix = new THREE.Matrix4();
         matrix.makeRotationFromEuler(globe.rotation);
