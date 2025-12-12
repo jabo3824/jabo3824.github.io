@@ -35,54 +35,6 @@ function latLonToVector3(lat, lon, radius) {
     return new THREE.Vector3(x, y, z);
 }
 
-function createPinMarker() {
-    const pinGroup = new THREE.Group();
-    
-    // Pin head (teardrop shape using sphere)
-    const headGeometry = new THREE.SphereGeometry(0.025, 16, 16);
-    const headMaterial = new THREE.MeshPhongMaterial({
-        color: 0x829CB2,
-        shininess: 100,
-        specular: 0xffffff
-    });
-    const head = new THREE.Mesh(headGeometry, headMaterial);
-    head.position.y = 0.04;
-    pinGroup.add(head);
-    
-    // Pin stem
-    const stemGeometry = new THREE.CylinderGeometry(0.006, 0.006, 0.04, 8);
-    const stemMaterial = new THREE.MeshPhongMaterial({
-        color: 0x829CB2,
-        shininess: 80
-    });
-    const stem = new THREE.Mesh(stemGeometry, stemMaterial);
-    stem.position.y = 0.02;
-    pinGroup.add(stem);
-    
-    // Pin point (cone)
-    const pointGeometry = new THREE.ConeGeometry(0.008, 0.015, 8);
-    const pointMaterial = new THREE.MeshPhongMaterial({
-        color: 0x6b8a9f,
-        shininess: 100
-    });
-    const point = new THREE.Mesh(pointGeometry, pointMaterial);
-    point.position.y = 0.0075;
-    point.rotation.x = Math.PI;
-    pinGroup.add(point);
-    
-    // Inner white dot on pin head
-    const dotGeometry = new THREE.SphereGeometry(0.01, 8, 8);
-    const dotMaterial = new THREE.MeshBasicMaterial({
-        color: 0xffffff
-    });
-    const dot = new THREE.Mesh(dotGeometry, dotMaterial);
-    dot.position.y = 0.04;
-    dot.position.z = 0.02;
-    pinGroup.add(dot);
-    
-    return pinGroup;
-}
-
 function init() {
     const container = document.getElementById('globe-container');
     
@@ -115,19 +67,49 @@ function init() {
     scene.add(globe);
 
     locations.forEach((location) => {
-        const pin = createPinMarker();
+        // Create glowing orb with multiple layers
+        const markerGroup = new THREE.Group();
         
-        const pos = latLonToVector3(location.lat, location.lon, 1.0);
-        pin.position.copy(pos);
+        // Inner core - bright and solid
+        const coreGeometry = new THREE.SphereGeometry(0.02, 16, 16);
+        const coreMaterial = new THREE.MeshBasicMaterial({
+            color: 0xffffff,
+            transparent: true,
+            opacity: 1
+        });
+        const core = new THREE.Mesh(coreGeometry, coreMaterial);
+        markerGroup.add(core);
         
-        // Orient pin to point outward from globe center
-        pin.lookAt(0, 0, 0);
-        pin.rotateX(Math.PI);
+        // Middle glow layer
+        const glowGeometry = new THREE.SphereGeometry(0.03, 16, 16);
+        const glowMaterial = new THREE.MeshBasicMaterial({
+            color: 0x829CB2,
+            transparent: true,
+            opacity: 0.6
+        });
+        const glow = new THREE.Mesh(glowGeometry, glowMaterial);
+        markerGroup.add(glow);
         
-        pin.userData = { location };
+        // Outer glow layer
+        const outerGlowGeometry = new THREE.SphereGeometry(0.04, 16, 16);
+        const outerGlowMaterial = new THREE.MeshBasicMaterial({
+            color: 0x829CB2,
+            transparent: true,
+            opacity: 0.3
+        });
+        const outerGlow = new THREE.Mesh(outerGlowGeometry, outerGlowMaterial);
+        markerGroup.add(outerGlow);
         
-        scene.add(pin);
-        markers.push(pin);
+        // Add point light for glow effect
+        const pointLight = new THREE.PointLight(0x829CB2, 0.5, 0.2);
+        markerGroup.add(pointLight);
+        
+        const pos = latLonToVector3(location.lat, location.lon, 1.02);
+        markerGroup.position.copy(pos);
+        markerGroup.userData = { location };
+        
+        scene.add(markerGroup);
+        markers.push(markerGroup);
     });
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
@@ -248,7 +230,7 @@ function animate() {
 
     markers.forEach((marker, index) => {
         const location = locations[index];
-        const pos = latLonToVector3(location.lat, location.lon, 1.0);
+        const pos = latLonToVector3(location.lat, location.lon, 1.02);
         
         const matrix = new THREE.Matrix4();
         matrix.makeRotationFromEuler(globe.rotation);
@@ -256,10 +238,11 @@ function animate() {
         
         marker.position.copy(pos);
         
-        // Keep pins pointing outward
-        const direction = pos.clone().normalize();
-        marker.lookAt(direction.multiplyScalar(-10));
-        marker.rotateX(Math.PI);
+        // Pulse effect for glow
+        const time = Date.now() * 0.001;
+        const pulse = Math.sin(time * 2 + index) * 0.2 + 0.8;
+        marker.children[1].material.opacity = 0.6 * pulse;
+        marker.children[2].material.opacity = 0.3 * pulse;
     });
 
     renderer.render(scene, camera);
