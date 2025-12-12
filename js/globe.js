@@ -153,9 +153,9 @@ function animateToLocation(location) {
     const phi = (90 - lat) * (Math.PI / 180);
     const theta = (lon + 180) * (Math.PI / 180);
     
-    // Rotate globe to bring point to front
-    targetRotation.y = -theta;
-    targetRotation.x = phi - Math.PI / 2;
+    // Rotate globe to bring point to front - try inverting both
+    targetRotation.y = theta;
+    targetRotation.x = -(phi - Math.PI / 2);
     
     isAnimatingToLocation = true;
     rotationVelocity = { x: 0, y: 0 };
