@@ -150,7 +150,7 @@ function animateToLocation(location) {
     
     // Rotate to center the location
     targetRotation.x = -lat * Math.PI / 180;
-    targetRotation.y = lon * Math.PI / 180;
+    targetRotation.y = -lon * Math.PI / 180;
     
     isAnimatingToLocation = true;
     rotationVelocity = { x: 0, y: 0 };
