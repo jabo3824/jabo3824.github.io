@@ -55,7 +55,7 @@ function init() {
     container.appendChild(renderer.domElement);
 
     const textureLoader = new THREE.TextureLoader();
-    const texture = textureLoader.load('/img/earth-texture.jpg');
+    const texture = textureLoader.load('/img/earth-texture-2.jpg');
 
     const globeGeometry = new THREE.SphereGeometry(1, 64, 64);
     const globeMaterial = new THREE.MeshPhongMaterial({
@@ -67,49 +67,22 @@ function init() {
     scene.add(globe);
 
     locations.forEach((location) => {
-        // Create glowing orb with multiple layers
-        const markerGroup = new THREE.Group();
-        
-        // Inner core - bright and solid
-        const coreGeometry = new THREE.SphereGeometry(0.02, 16, 16);
-        const coreMaterial = new THREE.MeshBasicMaterial({
-            color: 0xffffff,
-            transparent: true,
-            opacity: 1
-        });
-        const core = new THREE.Mesh(coreGeometry, coreMaterial);
-        markerGroup.add(core);
-        
-        // Middle glow layer
-        const glowGeometry = new THREE.SphereGeometry(0.03, 16, 16);
-        const glowMaterial = new THREE.MeshBasicMaterial({
+        // Create shiny 3D orb
+        const markerGeometry = new THREE.SphereGeometry(0.03, 32, 32);
+        const markerMaterial = new THREE.MeshPhongMaterial({
             color: 0x829CB2,
-            transparent: true,
-            opacity: 0.6
+            shininess: 100,
+            specular: 0xffffff,
+            reflectivity: 1
         });
-        const glow = new THREE.Mesh(glowGeometry, glowMaterial);
-        markerGroup.add(glow);
+        const marker = new THREE.Mesh(markerGeometry, markerMaterial);
         
-        // Outer glow layer
-        const outerGlowGeometry = new THREE.SphereGeometry(0.04, 16, 16);
-        const outerGlowMaterial = new THREE.MeshBasicMaterial({
-            color: 0x829CB2,
-            transparent: true,
-            opacity: 0.3
-        });
-        const outerGlow = new THREE.Mesh(outerGlowGeometry, outerGlowMaterial);
-        markerGroup.add(outerGlow);
+        const pos = latLonToVector3(location.lat, location.lon, 1.03);
+        marker.position.copy(pos);
+        marker.userData = { location };
         
-        // Add point light for glow effect
-        const pointLight = new THREE.PointLight(0x829CB2, 0.5, 0.2);
-        markerGroup.add(pointLight);
-        
-        const pos = latLonToVector3(location.lat, location.lon, 1.02);
-        markerGroup.position.copy(pos);
-        markerGroup.userData = { location };
-        
-        scene.add(markerGroup);
-        markers.push(markerGroup);
+        scene.add(marker);
+        markers.push(marker);
     });
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
@@ -163,10 +136,10 @@ function onMouseUp() {
 
 function onClick() {
     raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObjects(markers, true);
+    const intersects = raycaster.intersectObjects(markers);
     
     if (intersects.length > 0) {
-        const clickedMarker = intersects[0].object.parent;
+        const clickedMarker = intersects[0].object;
         const location = clickedMarker.userData.location;
         animateToLocation(location, clickedMarker);
         showLocationInfo(location);
@@ -176,16 +149,26 @@ function onClick() {
 }
 
 function animateToLocation(location, marker) {
+    // Get the marker's position in the unrotated globe space
     const basePos = latLonToVector3(location.lat, location.lon, 1.02);
     
+    // Calculate the angles this point makes
+    // We want to rotate the globe so this point is at (0, 0, positive z) facing camera
     const targetY = -Math.atan2(basePos.x, basePos.z);
     const targetX = Math.asin(basePos.y / 1.02);
     
+    // Set absolute target rotation
     targetRotation.y = targetY;
     targetRotation.x = targetX;
     
     isAnimatingToLocation = true;
     rotationVelocity = { x: 0, y: 0 };
+}
+
+function normalizeAngle(angle) {
+    while (angle > Math.PI) angle -= 2 * Math.PI;
+    while (angle < -Math.PI) angle += 2 * Math.PI;
+    return angle;
 }
 
 function showLocationInfo(location) {
@@ -230,28 +213,16 @@ function animate() {
 
     markers.forEach((marker, index) => {
         const location = locations[index];
-        const pos = latLonToVector3(location.lat, location.lon, 1.02);
+        const pos = latLonToVector3(location.lat, location.lon, 1.03);
         
         const matrix = new THREE.Matrix4();
         matrix.makeRotationFromEuler(globe.rotation);
         pos.applyMatrix4(matrix);
         
         marker.position.copy(pos);
-        
-        // Pulse effect for glow
-        const time = Date.now() * 0.001;
-        const pulse = Math.sin(time * 2 + index) * 0.2 + 0.8;
-        marker.children[1].material.opacity = 0.6 * pulse;
-        marker.children[2].material.opacity = 0.3 * pulse;
     });
 
     renderer.render(scene, camera);
-}
-
-function normalizeAngle(angle) {
-    while (angle > Math.PI) angle -= 2 * Math.PI;
-    while (angle < -Math.PI) angle += 2 * Math.PI;
-    return angle;
 }
 
 init();
