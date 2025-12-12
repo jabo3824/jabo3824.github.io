@@ -145,18 +145,17 @@ function onClick() {
 }
 
 function animateToLocation(location, marker) {
-    // Get the current world position of the marker
-    const markerWorldPos = new THREE.Vector3();
-    marker.getWorldPosition(markerWorldPos);
+    // Get the marker's position in the unrotated globe space
+    const basePos = latLonToVector3(location.lat, location.lon, 1.02);
     
-    // Calculate the angles needed to rotate this point to face the camera
-    // Camera is looking down the -Z axis, so we want the point at (0, 0, -distance)
-    const currentY = Math.atan2(markerWorldPos.x, markerWorldPos.z);
-    const currentX = Math.asin(markerWorldPos.y / 1.02);
+    // Calculate the angles this point makes
+    // We want to rotate the globe so this point is at (0, 0, positive z) facing camera
+    const targetY = -Math.atan2(basePos.x, basePos.z);
+    const targetX = -Math.asin(basePos.y / 1.02);
     
-    // Calculate target rotation (rotate from current position to center)
-    targetRotation.y = globe.rotation.y - currentY;
-    targetRotation.x = globe.rotation.x - currentX;
+    // Set absolute target rotation
+    targetRotation.y = targetY;
+    targetRotation.x = targetX;
     
     isAnimatingToLocation = true;
     rotationVelocity = { x: 0, y: 0 };
