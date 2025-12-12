@@ -148,18 +148,10 @@ function animateToLocation(location) {
     const lat = location.lat;
     const lon = location.lon;
     
-    // Calculate where the point currently is in 3D space
-    const phi = (90 - lat) * (Math.PI / 180);
-    const theta = (lon + 180) * (Math.PI / 180);
-    
-    // Calculate the rotation needed from current globe rotation
-    // to bring this point to face the camera (0, 0, positive Z)
-    const currentRotY = globe.rotation.y;
-    const currentRotX = globe.rotation.x;
-    
-    // Target rotation to center the point
-    targetRotation.y = currentRotY + theta - Math.PI;
-    targetRotation.x = currentRotX - (phi - Math.PI / 2);
+    // Simple direct calculation: rotate so point faces forward
+    // The point is at these spherical coordinates, we want it at (0, 0, +radius)
+    targetRotation.x = lat * Math.PI / 180;
+    targetRotation.y = -lon * Math.PI / 180;
     
     isAnimatingToLocation = true;
     rotationVelocity = { x: 0, y: 0 };
