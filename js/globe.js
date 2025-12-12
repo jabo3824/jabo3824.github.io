@@ -55,7 +55,7 @@ function init() {
     container.appendChild(renderer.domElement);
 
     const textureLoader = new THREE.TextureLoader();
-    const texture = textureLoader.load('/img/earth-texture.jpg');
+    const texture = textureLoader.load('images/earth-texture.jpg');
 
     const globeGeometry = new THREE.SphereGeometry(1, 64, 64);
     const globeMaterial = new THREE.MeshPhongMaterial({
@@ -148,8 +148,8 @@ function animateToLocation(location) {
     const phi = (90 - location.lat) * (Math.PI / 180);
     const theta = (location.lon + 180) * (Math.PI / 180);
     
-    targetRotation.x = phi - Math.PI / 2;
-    targetRotation.y = -theta;
+    targetRotation.x = -(phi - Math.PI / 2);
+    targetRotation.y = theta + Math.PI;
     
     isAnimatingToLocation = true;
     rotationVelocity = { x: 0, y: 0 };
