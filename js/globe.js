@@ -148,10 +148,9 @@ function animateToLocation(location) {
     const lat = location.lat;
     const lon = location.lon;
     
-    // Simple direct calculation: rotate so point faces forward
-    // The point is at these spherical coordinates, we want it at (0, 0, +radius)
+    // Simple direct calculation with 180 flip to face camera
     targetRotation.x = lat * Math.PI / 180;
-    targetRotation.y = -lon * Math.PI / 180;
+    targetRotation.y = (-lon * Math.PI / 180) + Math.PI;
     
     isAnimatingToLocation = true;
     rotationVelocity = { x: 0, y: 0 };
