@@ -25,6 +25,7 @@ let rotationVelocity = { x: 0, y: 0 };
 let isAnimatingToLocation = false;
 let targetRotation = { x: 0, y: 0 };
 let currentRotation = { x: 0, y: 0 };
+let autoRotate = true;
 
 function latLonToVector3(lat, lon, radius) {
     const phi = (90 - lat) * (Math.PI / 180);
@@ -67,8 +68,8 @@ function init() {
     scene.add(globe);
 
     locations.forEach((location) => {
-        // Create shiny 3D orb
-        const markerGeometry = new THREE.SphereGeometry(0.03, 32, 32);
+        // Create shiny 3D orb that sits halfway in the surface
+        const markerGeometry = new THREE.SphereGeometry(0.025, 32, 32);
         const markerMaterial = new THREE.MeshPhongMaterial({
             color: 0x829CB2,
             shininess: 100,
@@ -77,7 +78,8 @@ function init() {
         });
         const marker = new THREE.Mesh(markerGeometry, markerMaterial);
         
-        const pos = latLonToVector3(location.lat, location.lon, 1.03);
+        // Position at globe surface (radius 1.0) so half the orb sits below surface
+        const pos = latLonToVector3(location.lat, location.lon, 1.0125);
         marker.position.copy(pos);
         marker.userData = { location };
         
@@ -141,6 +143,7 @@ function onClick() {
     if (intersects.length > 0) {
         const clickedMarker = intersects[0].object;
         const location = clickedMarker.userData.location;
+        autoRotate = false;
         animateToLocation(location, clickedMarker);
         showLocationInfo(location);
     } else {
@@ -204,6 +207,8 @@ function animate() {
             globe.rotation.y = targetRotation.y;
             isAnimatingToLocation = false;
         }
+    } else if (!isDragging && autoRotate) {
+        globe.rotation.y += 0.002;
     } else if (!isDragging) {
         rotationVelocity.x *= 0.95;
         rotationVelocity.y *= 0.95;
@@ -213,7 +218,7 @@ function animate() {
 
     markers.forEach((marker, index) => {
         const location = locations[index];
-        const pos = latLonToVector3(location.lat, location.lon, 1.03);
+        const pos = latLonToVector3(location.lat, location.lon, 1.0125);
         
         const matrix = new THREE.Matrix4();
         matrix.makeRotationFromEuler(globe.rotation);
