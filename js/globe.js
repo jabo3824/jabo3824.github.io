@@ -12,8 +12,7 @@ const locations = [
     { name: 'France', lat: 48.8566, lon: 2.3522, city: 'Paris', country: 'France' },
     { name: 'UAE', lat: 25.2048, lon: 55.2708, city: 'Dubai', country: 'UAE' },
     { name: 'Singapore', lat: 1.3521, lon: 103.8198, city: 'Singapore', country: 'Singapore' },
-    { name: 'Hong Kong', lat: 22.3193, lon: 114.1694, city: 'Hong Kong', country: 'Hong Kong' },
-    { name: 'China', lat: 31.2304, lon: 121.4737, city: 'Shanghai', country: 'China' }
+    { name: 'Hong Kong', lat: 22.3193, lon: 114.1694, city: 'Hong Kong', country: 'China' }
 ];
 
 let scene, camera, renderer, globe, markers = [];
