@@ -67,7 +67,7 @@ function init() {
     scene.add(globe);
 
     locations.forEach((location) => {
-        // Create shiny 3D orb that sits halfway in the surface
+        
         const markerGeometry = new THREE.SphereGeometry(0.025, 32, 32);
         const markerMaterial = new THREE.MeshPhongMaterial({
             color: 0x829CB2,
@@ -77,7 +77,7 @@ function init() {
         });
         const marker = new THREE.Mesh(markerGeometry, markerMaterial);
         
-        // Position at globe surface (radius 1.0) so half the orb sits below surface
+        
         const pos = latLonToVector3(location.lat, location.lon, 1.0125);
         marker.position.copy(pos);
         marker.userData = { location };
@@ -151,15 +151,15 @@ function onClick() {
 }
 
 function animateToLocation(location, marker) {
-    // Get the marker's position in the unrotated globe space
+    
     const basePos = latLonToVector3(location.lat, location.lon, 1.02);
     
-    // Calculate the angles this point makes
-    // We want to rotate the globe so this point is at (0, 0, positive z) facing camera
+    
+    
     const targetY = -Math.atan2(basePos.x, basePos.z);
     const targetX = Math.asin(basePos.y / 1.02);
     
-    // Set absolute target rotation
+    
     targetRotation.y = targetY;
     targetRotation.x = targetX;
     
